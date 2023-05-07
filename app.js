@@ -6,9 +6,9 @@ const {user_config,pagination,shortifyDescs,cookieParser} = require('./utils');
 
 
 const PORT = 8080;
-const db = "mongodb://localhost/TCT";
+// const db = "mongodb://localhost/TCT";
 
-mongoose.connect(db).then((element) => {
+mongoose.connect(user_config.db).then((element) => {
     console.log("CONNECTED WITH DATABASE");
 }).catch(() => {
     console.log("FAILED TO CONNECT WITH DATABASE");
@@ -46,7 +46,7 @@ const POSTS = mongoose.model('posts', postsSchema);
 
 // ENDPOINTS
 app.get('/', (req, res) => {
-    POSTS.find().then((document) => {
+    POSTS.find().then(document => {
 
         let pagination_data = pagination(req.url, document.length)
         let prev = pagination_data[0];
@@ -88,8 +88,8 @@ app.get('/deletePost', (req, res) => {
         _id: post_id
     }).then(element => {
         console.log(element);
+        res.redirect('/myPosts');
     });
-    res.redirect('/myPosts');
 })
 
 
@@ -114,8 +114,10 @@ app.post('/createPost', (req, res) => {
         _date: cnt_dt,
         title: cnt_title,
         desc: cnt_desc
-    }]);
-    res.redirect('/');
+    }]).then(element=>{
+        console.log(element);
+        res.redirect('/');
+    });
 })
 
 app.get('/myPosts', (req, res) => {

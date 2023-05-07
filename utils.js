@@ -1,6 +1,7 @@
 const user_config = {
     contentsPerPage: 6,
-    websiteTitle:"BLOG"
+    websiteTitle:"BLOG",
+    db: "mongodb+srv://iqbaljubayer8:wpzkHKA64VUlI7mp@ventron.d0kxyl4.mongodb.net/TCT"
 }
 
 function pagination(req_url, document_length) {
