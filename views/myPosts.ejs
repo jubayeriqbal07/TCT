@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,10 +7,11 @@
     <link rel="stylesheet" href="../static/CSS/utils.css">
     <link rel="stylesheet" href="../static/CSS/navigation.css">
     <link rel="stylesheet" href="../static/CSS/index.css">
-    <title>BLOG</title>
+    <link rel="stylesheet" href="../static/CSS/myPosts.css">
+    <title>BLOG - My Posts</title>
 </head>
-
 <body>
+
     <header class="navbar">
         <div class="nav-items">
             <a href="/"><img src="../static/ASSETS/logo.jpg" alt="BLOG"></a>
@@ -38,32 +38,28 @@
 
     <section class="contents-container">
         <div class="contents">
-            <h1>CONTENTS</h1>
-        </div>
-        <div class="contents">
-            <% data.forEach(element=> { %>
-                <div class="content-box">
-                    <h1> <a href="/posts?<%=element._id%>">
-                            <%= element.title %>
-                        </a></h1>
-                    <p>
-                        <%= element.desc%>
-                    </p>
-                    <div class="content-details">
-                        <p>Posted on: <b>
-                                <%= element._date%>
-                            </b> </p>
-                        <p>Posted by: <b>
-                                <%= element._usr%>
-                            </b></p>
+            <div class="contents">
+                <% data.forEach(element=> { %>
+                    <div class="content-box">
+                        <div class="deleteBtn" onclick="window.location.href='/deletePost?<%= element._id%>'"></div>
+                        <h1> <a href="/posts?<%=element._id%>">
+                                <%= element.title %>
+                            </a></h1>
+                        <p>
+                            <%= element.desc%>
+                        </p>
+                        <div class="content-details">
+                            <p>Posted on: <b>
+                                    <%= element._date%>
+                                </b> </p>
+                            <p>Posted by: <b>
+                                    <%= element._usr%>
+                                </b></p>
+                        </div>
                     </div>
-                </div>
-                <%})%>
+                    <%})%>
+            </div>
         </div>
-        <% if (isLoggedIn) {%>
-        <div class="add" onclick="window.location.href='/createPost'"></div>
-        <%}%>
-
         <div class="pagination_btn">
             <a class="btn" href="<%= prv%>">&#8592 PREV</a>
             <p style="display: inline;">
@@ -71,6 +67,7 @@
             </p>
             <a class="btn" href="<%= nxt%>">NEXT &#8594</a>
         </div>
+        
     </section>
 
     <footer>
@@ -81,6 +78,6 @@
             <a href="" class="fa fa-github"></a>
         </div>
     </footer>
+    
 </body>
-
 </html>

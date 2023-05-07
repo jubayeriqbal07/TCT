@@ -2,14 +2,11 @@
 const express = require("express");
 const path = require('path');
 const mongoose = require('mongoose');
+const {user_config,pagination,shortifyDescs,cookieParser} = require('./utils');
 
 
 const PORT = 8080;
 const db = "mongodb://localhost/TCT";
-
-const user_config = {
-    contentsPerPage: 6
-}
 
 mongoose.connect(db).then((element) => {
     console.log("CONNECTED WITH DATABASE");
@@ -20,6 +17,7 @@ mongoose.connect(db).then((element) => {
 const d = new Date();
 
 const app = express();
+
 // APP CONFIG
 app.use('/static', express.static(path.join(__dirname, "/static")));
 app.set('view engine', 'ejs');
@@ -44,71 +42,24 @@ const postsSchema = new mongoose.Schema({
 })
 const POSTS = mongoose.model('posts', postsSchema);
 
-function cookieParser(raw){
-    cookies = {}
-    if(raw == undefined){
-        cookies["isLoggedIn"] = false;
-        cookies["user_ID"] = "NaN";
-        return cookies
-    }
-    raw = raw.split('; ');
-    raw.forEach(element=>{
-        element = element.split("=");
-        cookies[element[0]] = element[1];
-    })
-    cookies.user_ID = cookies.user_ID.replace("%40","@");
-    return cookies
-}
+
 
 // ENDPOINTS
 app.get('/', (req, res) => {
     POSTS.find().then((document) => {
-        let last_page = 1
-        if (user_config.contentsPerPage == 1) {
-            last_page = document.length
-        } else if (user_config.contentsPerPage != document.length) {
-            last_page = Math.floor(document.length / user_config.contentsPerPage) + 1;
-        }
 
-        let current_page = req.url.split('=')[1]
-        if (current_page != undefined && current_page > last_page) {
-            current_page = last_page;
-        }
-        if (current_page == 1) {
-            current_page = undefined;
-        }
-
-        let strt = ((current_page - 1) * user_config.contentsPerPage);;
-        let end = 0;
-        if (current_page == undefined) {
-            strt = 0;
-        }
-
-        if (current_page == undefined || current_page == 1) {
-            prev = "#"
-            if (last_page > 1) {
-                next = "/?page=" + 2;
-            } else {
-                next = "#";
-            }
-        } else if (current_page >= last_page) {
-            prev = "/?page=" + (current_page - 1)
-            next = "#";
-        } else {
-            prev = "/?page=" + (current_page - 1)
-            next = "/?page=" + (Number(current_page) + 1)
-        }
-        end = strt + user_config.contentsPerPage;
-
-        if (current_page == undefined) {
-            current_page = 1
-        }
-
+        let pagination_data = pagination(req.url, document.length)
+        let prev = pagination_data[0];
+        let next = pagination_data[1];
+        let strt = pagination_data[2];
+        let end = pagination_data[3];
+        let current_page = pagination_data[4];
         cookies = cookieParser(req.headers.cookie);
+        temp_documents = shortifyDescs(document.slice(strt, end));
 
         params = {
-            data: document.slice(strt, end),
-            isLoggedIn:cookies.isLoggedIn,
+            data: temp_documents,
+            isLoggedIn: cookies.isLoggedIn,
             prv: prev,
             nxt: next,
             crr: current_page,
@@ -123,55 +74,107 @@ app.get('/posts/', (req, res) => {
     POSTS.findById(post_id).then(document => {
         params = {
             content: document,
-            isLoggedIn:cookies.isLoggedIn,
+            isLoggedIn: cookies.isLoggedIn,
         }
         res.render('posts', params = params);
     })
 })
 
+app.get('/deletePost', (req, res) => {
+    post_id = req.url.split('?')[1];
+    POSTS.deleteOne({
+        _id: post_id
+    }).then(element => {
+        console.log(element);
+    });
+    res.redirect('/myPosts');
+})
 
-app.get('/createPost',(req,res)=>{
+
+app.get('/createPost', (req, res) => {
     cookies = cookieParser(req.headers.cookie);
-    if(cookies.isLoggedIn){
+    if (cookies.isLoggedIn) {
         res.render('createPost');
-    }else{
+    } else {
         res.redirect("/");
     }
 });
 
-app.post('/createPost',(req,res)=>{
+app.post('/createPost', (req, res) => {
     cookies = cookieParser(req.headers.cookie);
     usr_email = cookies.user_ID;
     cnt_title = req.body.content_title;
     cnt_desc = req.body.content_desc;
     cnt_dt = `${d.getHours()}:${d.getMinutes()} - ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`
 
-    POSTS.insertMany([{_usr:usr_email,_date:cnt_dt,title:cnt_title,desc:cnt_desc}]);
+    POSTS.insertMany([{
+        _usr: usr_email,
+        _date: cnt_dt,
+        title: cnt_title,
+        desc: cnt_desc
+    }]);
     res.redirect('/');
 })
 
+app.get('/myPosts', (req, res) => {
+    cookies = cookieParser(req.headers.cookie);
+    if (cookies.isLoggedIn) {
+        POSTS.find({
+            _usr: cookies.user_ID
+        }).then((document) => {
+
+            let pagination_data = pagination(req.url, document.length)
+            let prev = pagination_data[0];
+            let next = pagination_data[1];
+            let strt = pagination_data[2];
+            let end = pagination_data[3];
+            let current_page = pagination_data[4];
+            cookies = cookieParser(req.headers.cookie);
+            temp_documents = shortifyDescs(document.slice(strt, end));
+
+            params = {
+                data: document.slice(strt, end),
+                isLoggedIn: cookies.isLoggedIn,
+                prv: prev,
+                nxt: next,
+                crr: current_page,
+            }
+            res.render('myPosts', params = params);
+        })
+    } else {
+        res.redirect('/');
+    }
+})
 
 
 app.get('/signIn', (req, res) => {
     cookies = cookieParser(req.headers.cookie);
-    if(!cookies.isLoggedIn){
-        res.render('signIn',params={inc:false});
-    }else{
+    if (!cookies.isLoggedIn) {
+        res.render('signIn', params = {
+            inc: false
+        });
+    } else {
         res.redirect('/')
     }
 })
 
 app.post('/signIn', (req, res) => {
-    USER.find({email:req.body.usr_email}).then(element=>{
-        if(element.length == 0){
-            res.render('signIn',params={inc:true});
-        }else{
-            if(req.body.usr_pass == element[0].password){
-                res.cookie("isLoggedIn",true);
-                res.cookie("user_ID",req.body.usr_email);
+    USER.find({
+        email: req.body.usr_email
+    }).then(element => {
+        if (element.length == 0) {
+            res.render('signIn', params = {
+                inc: true
+            });
+        } else {
+            if (req.body.usr_pass == element[0].password) {
+                res.cookie("isLoggedIn", true);
+                res.cookie("user_ID", req.body.usr_email);
                 res.redirect('/')
-            }else{
-                res.render('signIn',params={inc:true});
+            } else {
+                res.render('signIn', params = {
+                    inc: true
+                });
             }
         }
     })
@@ -179,9 +182,12 @@ app.post('/signIn', (req, res) => {
 
 app.get('/signUp', (req, res) => {
     cookies = cookieParser(req.headers.cookie);
-    if(!cookies.isLoggedIn){
-        res.render('signUp',params={empt:false,acc_exst:false});
-    }else{
+    if (!cookies.isLoggedIn) {
+        res.render('signUp', params = {
+            empt: false,
+            acc_exst: false
+        });
+    } else {
         res.redirect('/')
     }
 })
@@ -190,27 +196,35 @@ app.post('/signUp', (req, res) => {
     usr_fullname = req.body.usr_fullname
     usr_email = req.body.usr_email
     usr_pass = req.body.usr_pass
-    if(usr_fullname == "" || usr_email == "" || usr_pass == ""){
-        res.render('signUp',params={empt:true,acc_exst:false});
-    }else{
-        USER.findOne({email:usr_email}).then(element=>{
-            if(element == null){
+    if (usr_fullname == "" || usr_email == "" || usr_pass == "") {
+        res.render('signUp', params = {
+            empt: true,
+            acc_exst: false
+        });
+    } else {
+        USER.findOne({
+            email: usr_email
+        }).then(element => {
+            if (element == null) {
                 USER.insertMany([{
-                    fullname:usr_fullname,
-                    email:usr_email,
-                    password:usr_pass
+                    fullname: usr_fullname,
+                    email: usr_email,
+                    password: usr_pass
                 }]);
-                res.cookie("isLoggedIn",true);
-                res.cookie("user_ID",usr_email);
+                res.cookie("isLoggedIn", true);
+                res.cookie("user_ID", usr_email);
                 res.redirect('/')
-            }else{
-                res.render('signUp',params={empt:false,acc_exst:true});
+            } else {
+                res.render('signUp', params = {
+                    empt: false,
+                    acc_exst: true
+                });
             }
         })
     }
 })
 
-app.get('/signOut',(req,res)=>{
+app.get('/signOut', (req, res) => {
     res.clearCookie("isLoggedIn");
     res.clearCookie("user_ID");
     res.redirect('/')
