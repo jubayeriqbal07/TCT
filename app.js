@@ -58,6 +58,7 @@ app.get('/', (req, res) => {
         temp_documents = shortifyDescs(document.slice(strt, end));
 
         params = {
+            webTitle:user_config.websiteTitle,
             data: temp_documents,
             isLoggedIn: cookies.isLoggedIn,
             prv: prev,
@@ -73,6 +74,7 @@ app.get('/posts/', (req, res) => {
     post_id = req.url.split("?")[1]
     POSTS.findById(post_id).then(document => {
         params = {
+            webTitle:user_config.websiteTitle,
             content: document,
             isLoggedIn: cookies.isLoggedIn,
         }
@@ -94,7 +96,7 @@ app.get('/deletePost', (req, res) => {
 app.get('/createPost', (req, res) => {
     cookies = cookieParser(req.headers.cookie);
     if (cookies.isLoggedIn) {
-        res.render('createPost');
+        res.render('createPost',params={webTitle:user_config.websiteTitle,});
     } else {
         res.redirect("/");
     }
@@ -133,6 +135,7 @@ app.get('/myPosts', (req, res) => {
             temp_documents = shortifyDescs(document.slice(strt, end));
 
             params = {
+                webTitle:user_config.websiteTitle,
                 data: document.slice(strt, end),
                 isLoggedIn: cookies.isLoggedIn,
                 prv: prev,
@@ -151,6 +154,7 @@ app.get('/signIn', (req, res) => {
     cookies = cookieParser(req.headers.cookie);
     if (!cookies.isLoggedIn) {
         res.render('signIn', params = {
+            webTitle:user_config.websiteTitle,
             inc: false
         });
     } else {
@@ -164,6 +168,7 @@ app.post('/signIn', (req, res) => {
     }).then(element => {
         if (element.length == 0) {
             res.render('signIn', params = {
+                webTitle:user_config.websiteTitle,
                 inc: true
             });
         } else {
@@ -184,6 +189,7 @@ app.get('/signUp', (req, res) => {
     cookies = cookieParser(req.headers.cookie);
     if (!cookies.isLoggedIn) {
         res.render('signUp', params = {
+            webTitle:user_config.websiteTitle,
             empt: false,
             acc_exst: false
         });
@@ -198,6 +204,7 @@ app.post('/signUp', (req, res) => {
     usr_pass = req.body.usr_pass
     if (usr_fullname == "" || usr_email == "" || usr_pass == "") {
         res.render('signUp', params = {
+            webTitle:user_config.websiteTitle,
             empt: true,
             acc_exst: false
         });
