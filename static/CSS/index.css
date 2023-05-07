@@ -1,0 +1,89 @@
+.contents-container{
+    background-color: rgba(0, 230, 255,0.3);
+    position:relative;
+    width: 100%;
+    top: 94px;
+}
+
+.contents-container .contents > h1{
+    margin-top: 5px;
+    text-align: center;
+    text-decoration: underline;
+}
+.contents-container .contents{
+    padding: 10px;
+}
+
+.contents-container .contents .content-box{
+    background-color: rgba(0, 234, 234, 0.68);
+    margin: 10px;
+    padding: 10px 30px;
+    border-radius: 10px;
+}
+
+.contents-container .contents .content-box > *{
+    margin: 10px;
+}
+
+.contents-container .contents .content-box > h1{
+    padding: 5px 0
+}
+
+.contents-container .contents .content-box > h1 a{
+    color: black;
+}
+
+.contents-container .contents .content-box .content-details{
+    position: relative;
+    text-align: right;
+}
+
+.contents-container .pagination_btn{
+    text-align: center;
+    padding: 25px;
+}
+
+.contents-container .pagination_btn a{
+    margin: 20px;
+    background-color: white;
+    text-decoration: none;
+    color: black;
+}
+
+.add{
+    background-color: red;
+    width: 70px;
+    height: 70px;
+    border-radius: 100px;
+    position: fixed;
+    top: 75vh;
+    right: 20px;
+    z-index: 2;
+    cursor: pointer;
+}
+@media screen and (max-width:600px){
+    .contents-container{
+        top: 54px;
+    }
+
+    .contents-container .contents .content-box{
+        padding: 10px 0;
+    }
+
+    .contents-container .contents .content-box > h1{
+        font-size: 20px;
+    }
+
+    .contents-container .contents .content-box > p{
+        font-size: 13px;
+    }
+
+    .contents-container .contents .content-box .content-details > p{
+        font-size: 10px;
+    }
+
+    .add{
+        width: 55px;
+        height: 55px;
+    }
+}

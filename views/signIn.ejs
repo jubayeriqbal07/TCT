@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/CSS/utils.css">
+    <link rel="stylesheet" href="../static/CSS/sign.css">
+    <title>BLOG - Sign In</title>
+</head>
+
+<body>
+    <% if (inc) {%>
+        <div class="incorrect-message-container">
+            <div class="incorrect-message">
+                Username or password is incorrect
+            </div>
+        </div>
+
+    <%}%>
+
+    <section class="signIn-container">
+        <h1>Sign In</h1>
+        <form action="/signIn" method="post" id="signInForm">
+            <div class="items">
+                <h4>Email:</h4>
+                <input type="email" name="usr_email">
+            </div>
+            <div class="items">
+                <h4>Password:</h4>
+                <input type="password" name="usr_pass">
+            </div>
+            <div class="items">
+                <button class="btn" type="submit">Sign In</button>
+            </div>
+            <div class="items">
+                <p>Doesn't have an account? <a href="/signUp">Sign Up</a> </p>
+            </div>
+        </form>
+    </section>
+    <script src="../static/JS/signIn.js"></script>
+</body>
+
+</html>

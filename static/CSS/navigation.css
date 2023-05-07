@@ -1,0 +1,133 @@
+.navbar {
+    background-color: rgb(0, 212, 234);
+    display: flex;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    top: 0;
+}
+
+.navbar .nav-items img {
+    width: 80px;
+    margin: 3px 10px;
+    border: 2px solid white;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+.navbar .nav-items ul {
+    display: flex;
+    position: absolute;
+    top: 25px;
+    right: 10px;
+    align-items: center;
+}
+
+.navbar .nav-items ul li {
+    list-style: none;
+    margin: 0 10px;
+}
+
+.navbar .nav-items ul li a {
+    text-decoration: none;
+    padding: 3px 20px;
+    border: 2px solid black;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    color: black;
+}
+
+
+.navbar .nav-items ul li a:hover {
+    border-color: white;
+}
+
+.navbar .nav-items ul #usr_ico {
+    width: 40px;
+    height: 40px;
+    border: 2px solid white;
+    border-radius: 40px;
+    background-color: red;
+    cursor: pointer;
+}
+
+.navbar .nav-items ul #usr_menu .usr_menu_lst{
+    background-color: rgb(0, 212, 234);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 200px;
+    top: 68px;
+    right: -265px;
+    padding: 25px;
+    border-radius: 0 0 0 10px;
+    transition: all 1s ease;
+}
+
+.navbar .nav-items ul #usr_menu .usr_menu_lst_show{
+    right: -10px;
+}
+
+.navbar .nav-items ul #usr_menu .usr_menu_lst li{
+    margin: 20px;
+}
+
+.navbar .nav-items ul #usr_menu .usr_menu_lst li a{
+    display: block;
+    text-align: center;
+    width: 100px;
+    padding: 5px 30px;
+}
+
+
+
+
+footer {
+    position: relative;
+    top: 94px;
+    background-color: rgb(0, 212, 234);
+    height: 65px;
+    text-align: center;
+    padding: 10px;
+}
+
+footer .fa {
+    font-size: 2rem;
+    padding: 15px;
+    color: white;
+    background-color: black;
+    width: 30px;
+    border-radius: 100px;
+}
+
+footer .fa:hover {
+    color: purple;
+}
+
+@media screen and (max-width:600px){
+    .navbar .nav-items img{
+        width: 40px;
+    }
+    .navbar .nav-items ul{
+        top: 15px;
+    }
+    .navbar .nav-items ul #usr_ico{
+        width: 30px;
+        height: 30px;
+        margin: -7px 0;
+    }
+    .navbar .nav-items ul #usr_menu .usr_menu_lst{
+        top: 38px;
+    }
+
+    footer{
+        height: 40px;
+        top: 54px;
+    }
+
+    footer .fa{
+        font-size: 1rem;
+        padding: 10px;
+    }
+}
