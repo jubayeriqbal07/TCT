@@ -1,0 +1,7 @@
+.contents-container {
+    background-color: rgba(0, 230, 255,0.3);
+    position: relative;
+    width: 100%;
+    top: 94px;
+    height: 100vh;
+}

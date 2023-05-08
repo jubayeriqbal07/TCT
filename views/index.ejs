@@ -22,11 +22,11 @@
                 <li><a href="/signIn">Sign In</a></li>
                 <li><a href="/signUp">Sign Up</a></li>
                 <%} else{%>
-                <div id="usr_ico" onclick="usr_ico_clicked()"></div>
+                    <div id="usr_ico" onclick="usr_ico_clicked()" style="background: url('../static/ASSETS/<%=user_ID%>/usr_ico.jpg') center/cover no-repeat;"></div>
                 <div id="usr_menu">
                     <ul id="usr_menu_lst_id" class="usr_menu_lst">
-                        <li><a href="/profile">Profile</a></li>
-                        <li><a href="/myposts">My Posts</a></li>
+                        <li><a href="/">Profile</a></li>
+                        <li><a href="/myPosts">My Posts</a></li>
                         <li><a href="/signOut">Sign Out</a></li>
                     </ul>
                 </div>
@@ -54,7 +54,7 @@
                                 <%= element._date%>
                             </b> </p>
                         <p>Posted by: <b>
-                                <%= element._usr%>
+                                <a href="#"><%= element._usr%></a>
                             </b></p>
                     </div>
                 </div>

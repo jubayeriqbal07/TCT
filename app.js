@@ -4,7 +4,6 @@ const path = require('path');
 const mongoose = require('mongoose');
 const {user_config,pagination,shortifyDescs,cookieParser} = require('./utils');
 
-
 const PORT = 8080;
 // const db = "mongodb://localhost/TCT";
 
@@ -56,14 +55,15 @@ app.get('/', (req, res) => {
         let current_page = pagination_data[4];
         cookies = cookieParser(req.headers.cookie);
         temp_documents = shortifyDescs(document.slice(strt, end));
-
+        
         params = {
             webTitle:user_config.websiteTitle,
             data: temp_documents,
             isLoggedIn: cookies.isLoggedIn,
+            user_ID:cookies.user_ID.split("@")[0],
             prv: prev,
             nxt: next,
-            crr: current_page,
+            crr: current_page
         }
         res.render('index', params = params);
     })
@@ -77,21 +77,11 @@ app.get('/posts/', (req, res) => {
             webTitle:user_config.websiteTitle,
             content: document,
             isLoggedIn: cookies.isLoggedIn,
+            user_ID:cookies.user_ID.split("@")[0],
         }
         res.render('posts', params = params);
     })
 })
-
-app.get('/deletePost', (req, res) => {
-    post_id = req.url.split('?')[1];
-    POSTS.deleteOne({
-        _id: post_id
-    }).then(element => {
-        console.log(element);
-        res.redirect('/myPosts');
-    });
-})
-
 
 app.get('/createPost', (req, res) => {
     cookies = cookieParser(req.headers.cookie);
@@ -120,6 +110,16 @@ app.post('/createPost', (req, res) => {
     });
 })
 
+app.get('/deletePost', (req, res) => {
+    post_id = req.url.split('?')[1];
+    POSTS.deleteOne({
+        _id: post_id
+    }).then(element => {
+        console.log(element);
+        res.redirect('/myPosts');
+    });
+})
+
 app.get('/myPosts', (req, res) => {
     cookies = cookieParser(req.headers.cookie);
     if (cookies.isLoggedIn) {
@@ -140,6 +140,7 @@ app.get('/myPosts', (req, res) => {
                 webTitle:user_config.websiteTitle,
                 data: document.slice(strt, end),
                 isLoggedIn: cookies.isLoggedIn,
+                user_ID:cookies.user_ID.split("@")[0],
                 prv: prev,
                 nxt: next,
                 crr: current_page,

@@ -4,8 +4,6 @@ function usr_ico_clicked(){
 }
 window.addEventListener('click',(event=>{
     if(event.target.id != "usr_ico" && event.target.id != "usr_menu_lst_id"){
-        console.log(event.target.id)
-        console.log("Okay")
         usr_menu_lst_id.classList.remove("usr_menu_lst_show");
     }
 }))

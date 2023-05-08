@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,8 +9,11 @@
     <link rel="stylesheet" href="../static/CSS/utils.css">
     <link rel="stylesheet" href="../static/CSS/navigation.css">
     <link rel="stylesheet" href="../static/CSS/posts.css">
-    <title><%= webTitle%> - <%=content.title%></title>
+    <title>
+        <%= webTitle%> - <%=content.title%>
+    </title>
 </head>
+
 <body>
     <header class="navbar">
         <div class="nav-items">
@@ -18,31 +22,41 @@
         <div class="nav-items">
             <ul>
                 <% if (!isLoggedIn) {%>
-                <li><a href="/signIn">Sign In</a></li>
-                <li><a href="/signUp">Sign Up</a></li>
-                <%} else{%>
-                <div id="usr_ico" onclick="usr_ico_clicked()"></div>
-                <div id="usr_menu">
-                    <ul id="usr_menu_lst_id" class="usr_menu_lst">
-                        <li><a href="/profile">Profile</a></li>
-                        <li><a href="/myposts">My Posts</a></li>
-                        <li><a href="/signOut">Sign Out</a></li>
-                    </ul>
-                </div>
-                <%}%>
+                    <li><a href="/signIn">Sign In</a></li>
+                    <li><a href="/signUp">Sign Up</a></li>
+                    <%} else{%>
+                        <div id="usr_ico" onclick="usr_ico_clicked()"
+                            style="background: url('../static/ASSETS/<%=user_ID%>/usr_ico.jpg') center/cover no-repeat;">
+                        </div>
+                        <div id="usr_menu">
+                            <ul id="usr_menu_lst_id" class="usr_menu_lst">
+                                <li><a href="/">Profile</a></li>
+                                <li><a href="/myPosts">My Posts</a></li>
+                                <li><a href="/signOut">Sign Out</a></li>
+                            </ul>
+                        </div>
+                        <%}%>
             </ul>
         </div>
         <script src="../static/JS/navigation.js"></script>
     </header>
-    
+
     <section class="content-container">
         <div class="contents">
             <div class="content-box">
-                <h1><%= content.title %></h1>
-                <p><%= content.desc %></p>
+                <h1>
+                    <%= content.title %>
+                </h1>
+                <p>
+                    <%= content.desc %>
+                </p>
                 <div class="content-details">
-                    <p>Posted on: <b><%= content._date %></b> </p>
-                    <p>Posted by: <b><%= content._usr %></b> </p>
+                    <p>Posted on: <b>
+                            <%= content._date %>
+                        </b> </p>
+                    <p>Posted by: <b>
+                        <a href="#"><%= content._usr%></a>
+                        </b> </p>
                 </div>
             </div>
         </div>
@@ -56,4 +70,5 @@
         <a href="" class="fa fa-github"></a>
     </footer>
 </body>
+
 </html>

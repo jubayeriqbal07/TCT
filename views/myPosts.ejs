@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,8 +9,11 @@
     <link rel="stylesheet" href="../static/CSS/navigation.css">
     <link rel="stylesheet" href="../static/CSS/index.css">
     <link rel="stylesheet" href="../static/CSS/myPosts.css">
-    <title><%= webTitle%> - My Posts</title>
+    <title>
+        <%= webTitle%> - My Posts
+    </title>
 </head>
+
 <body>
 
     <header class="navbar">
@@ -19,18 +23,20 @@
         <div class="nav-items">
             <ul>
                 <% if (!isLoggedIn) {%>
-                <li><a href="/signIn">Sign In</a></li>
-                <li><a href="/signUp">Sign Up</a></li>
-                <%} else{%>
-                <div id="usr_ico" onclick="usr_ico_clicked()"></div>
-                <div id="usr_menu">
-                    <ul id="usr_menu_lst_id" class="usr_menu_lst">
-                        <li><a href="/profile">Profile</a></li>
-                        <li><a href="/myposts">My Posts</a></li>
-                        <li><a href="/signOut">Sign Out</a></li>
-                    </ul>
-                </div>
-                <%}%>
+                    <li><a href="/signIn">Sign In</a></li>
+                    <li><a href="/signUp">Sign Up</a></li>
+                    <%} else{%>
+                        <div id="usr_ico" onclick="usr_ico_clicked()"
+                            style="background: url('../static/ASSETS/<%=user_ID%>/usr_ico.jpg') center/cover no-repeat;">
+                        </div>
+                        <div id="usr_menu">
+                            <ul id="usr_menu_lst_id" class="usr_menu_lst">
+                                <li><a href="/">Profile</a></li>
+                                <li><a href="/myPosts">My Posts</a></li>
+                                <li><a href="/signOut">Sign Out</a></li>
+                            </ul>
+                        </div>
+                        <%}%>
             </ul>
         </div>
         <script src="../static/JS/navigation.js"></script>
@@ -53,7 +59,7 @@
                                     <%= element._date%>
                                 </b> </p>
                             <p>Posted by: <b>
-                                    <%= element._usr%>
+                                    <%= element._usr %>
                                 </b></p>
                         </div>
                     </div>
@@ -67,7 +73,7 @@
             </p>
             <a class="btn" href="<%= nxt%>">NEXT &#8594</a>
         </div>
-        
+
     </section>
 
     <footer>
@@ -78,6 +84,7 @@
             <a href="" class="fa fa-github"></a>
         </div>
     </footer>
-    
+
 </body>
+
 </html>
